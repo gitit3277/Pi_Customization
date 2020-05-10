@@ -6,3 +6,11 @@
 #	disable screen timeout 
 #	duplicate HDMI-1 and HDMI-2 *** This setting will only alter the Pi 4 behaviour 
 #	allow you to select a Static IP from a drop down list     
+#	open port 22 so that ssh works 
+
+
+#	Bugs 
+#	SSH is not working due to closed port 22
+#		*port opened using :
+#		sudo systemctl enable ssh
+#		sudo systemctl start ssh

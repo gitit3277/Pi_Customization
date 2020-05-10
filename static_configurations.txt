@@ -1,0 +1,3 @@
+#These are instructions    
+#Id, Name, Location, ip address/subnet, routers, dns, webpage
+#ID=001, Computer1, Location1, ip_address=10.172.103.21/24, routers=10.172.103.1,domain_name_servers=10.172.103.21, yahoo.com

@@ -6,8 +6,8 @@ import os, time
 
 #Takes string input and returns dictionary with keys  
 def dict_return(strings):
-	dictionary_keys=["ID", "NAME", "LOCATION", "IP_SUBNET", "ROUTERS", "DNS","WEBPAGE"]
-	temp_list=strings.rstrip(' ').split(",")
+	dictionary_keys=["ID", "NAME", "LOCATION", "IP_SUBNET", "ROUTERS", "DNS", "NTP", "WEBPAGE"]
+	temp_list=strings.strip(' ').split(",")
 	dictionary_list={}	
 	for i in range(len(dictionary_keys)):
 		dictionary_list.update({dictionary_keys[i]: temp_list[i]})
@@ -26,16 +26,51 @@ def list_of_configurations(FILENAME):
 	return content	
 
 #Script1 sets NTP by modifying /etc/systemd/timesyncd.conf 
-def script1():
-	pass
+def script1(pie):
+	os.system("echo [Time] >/etc/systemd/timesyncd.conf")
+	f = open("/etc/systemd/timesyncd.conf", "a")
+	f.write(pie["NTP"])
+	f.close()	
 
 #Script2 sets the IP address to static by modifying /etc/dhcpcd.conf
-def script2(): 
-	pass
+def script2(pie): 
+
+	f = open("/etc/xdg/lxsession/LXDE-pi/autostart", "w")
+	f.write("@lxpanel --profile LXDE-pi\n@pcmanfm --desktop --profile LXDE-pi\n@xscreensaver -no-splash\npoint-rpi\n@chromium-browser --noerrdialogs --kiosk --incognito ")	
+	f.close()	
+
+	f = open("/etc/xdg/lxsession/LXDE-pi/autostart", "a")
+	f.write(pie["WEBPAGE"])
+	f.write("\n@xset s noblank\n@xset s off\n@xset s -dpms\n@xrandr --output HDMI-2 --same-as HDMI-1\n")
+	
+	f.close()
 
 #Script3 sets the Kiosk webpage, disables the screen timeout, duplicates the HDMI-1 on HDMI-2 and enables SSH by modyfing the /etc/xdg/lxsession/LXDE-pi/autostart file
-def script3():
-	pass
+def script3(pie):
+	
+	f = open("/etc/dhcpcd.conf", "w")
+	f.write("interface eth0 \n")
+	f.close()
+
+	
+	f = open("/etc/dhcpcd.conf", "a")     
+	f.write("hostname \n")
+	f.write("clientid: \n")
+	f.write("persistent \n")
+	f.write("option rapid_commit \n")
+	f.write("option domain_name_servers, domain_name, domain_search, host_name \n")
+	f.write("option classless_static_routes \n")
+	f.write("option interface_mtu \n")
+
+	f.write("static "+pie["IP_SUBNET"]+"\n")
+	f.write("static "+pie["ROUTERS"]+"\n")
+	f.write("static "+pie["DNS"]+"\n")
+
+	f.close()
+
+
+
+
 
 def click():
 	print(listbox.get(ACTIVE)[:6])
@@ -44,13 +79,13 @@ def click():
 			print("Found it")	
 			print(pies[i])
 			#Set NTP
-			script1()
+			script1(pies[i])
 			
 			#Set Static IP
-			script2()
+			script2(pies[i])
 
 			#Set Kiosk Webpage, Disable screen timeout, Duplicate HDMI-1 on HDMI-2, enable ssh 	
-			script3()
+			script3(pies[i])
 
 	pass
 

@@ -25,6 +25,38 @@ def list_of_configurations(FILENAME):
 	
 	return content	
 
+#Script1 sets NTP by modifying /etc/systemd/timesyncd.conf 
+def script1():
+	pass
+
+#Script2 sets the IP address to static by modifying /etc/dhcpcd.conf
+def script2(): 
+	pass
+
+#Script3 sets the Kiosk webpage, disables the screen timeout, duplicates the HDMI-1 on HDMI-2 and enables SSH by modyfing the /etc/xdg/lxsession/LXDE-pi/autostart file
+def script3():
+	pass
+
+def click():
+	print(listbox.get(ACTIVE)[:6])
+	for i in range(len(pies)):
+		if pies[i]["ID"]==listbox.get(ACTIVE)[:6]:
+			print("Found it")	
+			print(pies[i])
+			#Set NTP
+			script1()
+			
+			#Set Static IP
+			script2()
+
+			#Set Kiosk Webpage, Disable screen timeout, Duplicate HDMI-1 on HDMI-2, enable ssh 	
+			script3()
+
+	pass
+
+def reboot_now():
+	pass
+
 if __name__=="__main__":
 	pies=list_of_configurations("static_configurations.txt")	
 	
@@ -50,6 +82,12 @@ if __name__=="__main__":
 	#add the configuration options to the list
 	for i in range(len(pies)):
 		listbox.insert(END, pies[i]["ID"]+pies[i]["NAME"])
+
+	#add a button to perform the configuration 
+	Button(window, text="SUBMIT", width=6, command=click) .pack() 
+
+	#add a reboot button 
+	Button(window, text="Reboot", width=6, command=reboot_now) .pack() 
 
 	#run the main loop   
 	window.mainloop() 

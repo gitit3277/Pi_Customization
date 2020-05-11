@@ -7,10 +7,13 @@ import os, time
 #Takes string input and returns dictionary with keys  
 def dict_return(strings):
 	dictionary_keys=["ID", "NAME", "LOCATION", "IP_SUBNET", "ROUTERS", "DNS", "NTP", "WEBPAGE"]
-	temp_list=strings.strip(' ').split(",")
+	temp_list=strings.strip()
+
+	temp_list=strings.split(",")
+
 	dictionary_list={}	
 	for i in range(len(dictionary_keys)):
-		dictionary_list.update({dictionary_keys[i]: temp_list[i]})
+		dictionary_list.update({dictionary_keys[i]: temp_list[i].strip()})
 	return dictionary_list	
 
 
@@ -29,7 +32,7 @@ def list_of_configurations(FILENAME):
 def script1(pie):
 	os.system("echo [Time] >/etc/systemd/timesyncd.conf")
 	f = open("/etc/systemd/timesyncd.conf", "a")
-	f.write(pie["NTP"])
+	f.write(pie["NTP"]  + "\n")
 	f.close()	
 
 #Script2 sets the IP address to static by modifying /etc/dhcpcd.conf
@@ -55,7 +58,7 @@ def script3(pie):
 	
 	f = open("/etc/dhcpcd.conf", "a")     
 	f.write("hostname \n")
-	f.write("clientid: \n")
+	f.write("clientid \n")
 	f.write("persistent \n")
 	f.write("option rapid_commit \n")
 	f.write("option domain_name_servers, domain_name, domain_search, host_name \n")
@@ -73,11 +76,8 @@ def script3(pie):
 
 
 def click():
-	print(listbox.get(ACTIVE)[:6])
 	for i in range(len(pies)):
 		if pies[i]["ID"]==listbox.get(ACTIVE)[:6]:
-			print("Found it")	
-			print(pies[i])
 			#Set NTP
 			script1(pies[i])
 			
@@ -90,7 +90,8 @@ def click():
 	pass
 
 def reboot_now():
-	pass
+	time.sleep(3)
+	os.system("init 6")
 
 if __name__=="__main__":
 	pies=list_of_configurations("static_configurations.txt")	
@@ -116,7 +117,7 @@ if __name__=="__main__":
 
 	#add the configuration options to the list
 	for i in range(len(pies)):
-		listbox.insert(END, pies[i]["ID"]+pies[i]["NAME"])
+		listbox.insert(END, pies[i]["ID"]+" "+pies[i]["NAME"])
 
 	#add a button to perform the configuration 
 	Button(window, text="SUBMIT", width=6, command=click) .pack() 

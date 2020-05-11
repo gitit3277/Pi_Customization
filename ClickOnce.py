@@ -77,6 +77,8 @@ def script3(pie):
 
 def click():
 	for i in range(len(pies)):
+
+
 		if pies[i]["ID"]==listbox.get(ACTIVE)[:6]:
 			#Set NTP
 			script1(pies[i])
@@ -87,7 +89,12 @@ def click():
 			#Set Kiosk Webpage, Disable screen timeout, Duplicate HDMI-1 on HDMI-2, enable ssh 	
 			script3(pies[i])
 
-	pass
+			if pies[i]["NAME"]=="Default":
+				print("Defaults are being set")
+				
+			os.system("cp DEFAULTS/timesyncd.conf /etc/systemd/timesyncd.conf")
+			os.system("cp DEFAULTS/dhcpcd.conf /etc/dhcpcd.conf") 
+			os.system("cp DEFAULTS/autostart /etc/xdg/lxsession/LXDE-pi/autostart") 
 
 def reboot_now():
 	time.sleep(3)

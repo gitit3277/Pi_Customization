@@ -5,3 +5,4 @@ ID=002, Computer2, Location2, ip_address=10.172.103.22/24, routers=10.172.103.1,
 ID=003, Computer3, Location3, ip_address=10.172.103.23/24, routers=10.172.103.1, domain_name_servers=10.172.72.5, time.google.com, yahoo.com
 ID=004, Computer4, Location4, ip_address=10.172.103.24/24, routers=10.172.103.1, domain_name_servers=10.172.72.5, time.google.com, yahoo.com
 ID=005, Computer5, Location5, ip_address=10.172.103.25/24, routers=10.172.103.1, domain_name_servers=10.172.72.5, time.google.com, yahoo.com
+ID=006, Default, Default, Default, Default, Default, Default, Default
